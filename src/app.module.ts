@@ -8,6 +8,9 @@ import { CategoriesModule } from './categories/categories.module';
 import { Product } from './products/products.entity';
 import { Category } from './categories/categories.entity';
 import { McpModule } from './mcp/mcp.module';
+import { AiAgentController } from './ai-agent/ai-agent.controller';
+import { AiAgentService } from './ai-agent/ai-agent.service';
+import { AiAgentModule } from './ai-agent/ai-agent.module';
 
 @Module({
   imports: [
@@ -26,8 +29,8 @@ import { McpModule } from './mcp/mcp.module';
       logging: true,
     }),
     McpModule,
-    ProductsModule, CategoriesModule],
-  controllers: [AppController],
-  providers: [AppService],
+    ProductsModule, CategoriesModule, AiAgentModule],
+  controllers: [AppController, AiAgentController],
+  providers: [AppService, AiAgentService],
 })
 export class AppModule {}
