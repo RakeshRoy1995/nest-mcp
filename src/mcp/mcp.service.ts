@@ -5,16 +5,16 @@ import { CategoriesService } from '../categories/categories.service';
 @Injectable()
 export class McpService {
   constructor(
-    private productsService: ProductsService,
-    private categoriesService: CategoriesService,
+    private readonly productsService: ProductsService,
+    private readonly categoriesService: CategoriesService,
   ) {}
 
-  // 🧰 Define tools
+  // 🧰 List all MCP tools
   getTools() {
     return [
       {
         name: 'getProducts',
-        description: 'Get all products',
+        description: 'Fetch all products with their categories',
         inputSchema: {
           type: 'object',
           properties: {},
@@ -22,20 +22,21 @@ export class McpService {
       },
       {
         name: 'createProduct',
-        description: 'Create a product',
+        description: 'Create a new product',
         inputSchema: {
           type: 'object',
           properties: {
             name: { type: 'string' },
             price: { type: 'number' },
             categoryId: { type: 'number' },
+            description: { type: 'string' },
           },
           required: ['name', 'price', 'categoryId'],
         },
       },
       {
         name: 'getCategories',
-        description: 'Get all categories',
+        description: 'Fetch all categories',
         inputSchema: {
           type: 'object',
           properties: {},
@@ -43,7 +44,7 @@ export class McpService {
       },
       {
         name: 'createCategory',
-        description: 'Create category',
+        description: 'Create a new category',
         inputSchema: {
           type: 'object',
           properties: {
@@ -56,7 +57,7 @@ export class McpService {
     ];
   }
 
-  // ⚡ Tool executor
+  // ⚡ Execute MCP tool calls
   async callTool(name: string, args: any) {
     switch (name) {
       case 'getProducts':
@@ -72,7 +73,7 @@ export class McpService {
         return this.categoriesService.create(args);
 
       default:
-        throw new Error('Tool not found');
+        throw new Error(`Tool '${name}' not found`);
     }
   }
 }
