@@ -29,4 +29,8 @@ export class Product {
   })
   @JoinColumn({ name: 'categoryId' })
   category: Category;
+
+  // <-- New stock column
+  @Column({ type: 'int', default: 0 })
+  stock: number;
 }
