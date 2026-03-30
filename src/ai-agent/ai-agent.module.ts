@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { AiAgentService } from './ai-agent.service';
 import { AiAgentController } from './ai-agent.controller';
-import { McpModule } from '../mcp/mcp.module'; // ✅ Import MCP
+import { McpModule } from '../mcp/mcp.module';
 
 @Module({
   imports: [McpModule],

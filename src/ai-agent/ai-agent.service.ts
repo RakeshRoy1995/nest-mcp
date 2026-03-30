@@ -10,24 +10,31 @@ export class AiAgentService {
     this.openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
   }
 
+  // Handle natural language prompt
   async handlePrompt(prompt: string) {
     const response = await this.openai.chat.completions.create({
-      model: 'gpt-4',
+      model: 'gpt-3.5-turbo',
       messages: [
-        { role: 'system', content: 'You are an assistant that calls MCP tools.' },
+        { role: 'system', content: 'You are an AI agent for MCP server tools. Analyze user intent and decide which tool to call.' },
         { role: 'user', content: prompt },
       ],
     });
 
-    // Use optional chaining and fallback to empty string
     const aiText = response.choices?.[0]?.message?.content ?? '';
 
-    // ✅ Safe check
-    if (aiText.includes('getProducts')) {
-      const products = await this.mcpService.callTool('getProducts', {});
-      return products;
+    // Detect tool name from AI response dynamically
+    const availableTools = this.mcpService.getTools().map(t => t.name);
+
+    for (const toolName of availableTools) {
+      if (aiText.toLowerCase().includes(toolName.toLowerCase())) {
+        // Call the MCP tool with optional args
+        // Here, we just pass empty args, can enhance later
+        const result = await this.mcpService.callTool(toolName, {});
+        return { tool: toolName, result };
+      }
     }
 
-    return aiText;
+    // If no tool detected, just return AI text
+    return { text: aiText };
   }
 }
